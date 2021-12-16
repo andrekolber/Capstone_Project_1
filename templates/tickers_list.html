@@ -1,0 +1,29 @@
+{%extends 'base.html'%}
+{%block title%}Tickers List{%endblock%}
+
+{%block content%}
+<div id="ticker-table">
+<table>
+    <thead class="table-head">
+        <tr class="table-head-row">
+            <th>Symbol</th>
+            <th>Company Name</th>
+            <th>Exchange</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in stocks %}
+        <tr>
+            <td>{{stock.symbol}}</td>
+            <td>{{stock.name}}</td>
+            <td>{{stock.exchange}}</td>
+        </tr>
+        {%endfor%}
+        <div class="list-back-btn">
+        <a href="/homepage" class="btn btn-sml btn-primary"> Go Back</a>
+        </div>
+    </tbody>
+</table>
+</div>
+{%endblock%}

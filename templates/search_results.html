@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{%block title%}Search Result{%endblock%}
+
+{%block content%}
+<h2 id="stock-info-h2">Stock Information</h2>
+<div class="stock-info-div">
+    <ul class="stock-info-list">
+        <li><b>Ticker: </b>{{stock['symbol']}}</li>
+        <li><b>Company Name: </b>{{stock['name']}}</li>
+        <li><b>Stock Price: </b>{{stock['price']}}</li>
+        <li><b>Changes Percentage: </b>{{stock['changesPercentage']}}%</li>
+        <li><b>Change: </b>{{stock['change']}}</li>
+        <li><b>Day Low: </b>{{stock['dayLow']}}</li>
+        <li><b>Day High: </b> {{stock['dayHigh']}}</li>
+        <li><b>Year Low: </b>{{stock['yearLow']}}</li>
+        <li><b>Year High: </b>{{stock['yearHigh']}}</li>
+        <li><b>Market Cap: </b>{{stock['marketCap']}}</li>
+        <li><b>Price Average 50: </b>{{stock['priceAvg50']}}</li>
+        <li><b>Price Average 200: </b>{{stock['priceAvg200']}}</li>
+        <li><b>Volume: </b>{{stock['volume']}}</li>
+        <li><b>Exchange: </b>{{stock['exchange']}}</li>
+        <br>
+        <form action="/track-stock">
+            <input type="hidden" name="tracked-stock" value="{{stock['symbol']}}">
+        <button>Track this Stock</button>
+         </form>
+        
+    </ul>
+    
+</div>
+
+
+{%endblock%}

@@ -1,0 +1,66 @@
+#homepage-h1 {
+    text-align: center;
+}
+
+.stock-info-list {
+    list-style-type: none;
+}
+
+
+.stock-info-div {
+    text-align: center;
+    padding-right: 30px;
+}
+
+#stock-info-h2 {
+    text-align: center;
+}
+
+#search-form {
+    text-align: center;
+}
+
+#stock-search {
+    width: 230px;
+    height: 37px;
+}
+
+#search-btn {
+    height: 38px;
+    margin-bottom: 3px;
+}
+
+#tracked-stocks-div {
+    text-align: center;
+    margin-top: 3rem;
+}
+#tracked-stocks-list {
+    list-style-type: none;
+}
+
+.tracked-stock {
+    display: block;
+    width: 25%;
+    float: left;
+    padding: 10px;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    float: right;
+}
+
+#ticker-table table {
+    margin: auto;
+}
+
+.list-back-btn {
+    position: fixed;
+    right: 0%;
+    bottom: 0%;
+}
+
+#login-h1 {
+    text-align: center;
+    padding-bottom: 10px;
+}
