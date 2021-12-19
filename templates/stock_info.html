@@ -2,7 +2,7 @@
 {%block title%}{{stock['symbol']}} Information{%endblock%}
 
 {%block content%}
-<h2 id="stock-info-h2">Stock Information</h2>
+<h2 id="stock-info-h2"> {{stock['name']}} Stock Information</h2>
 <div class="stock-info-div">
     <ul class="stock-info-list">
         <li><b>Ticker: </b>{{stock['symbol']}}</li>
@@ -19,14 +19,17 @@
         <li><b>Price Average 200: </b>{{stock['priceAvg200']}}</li>
         <li><b>Volume: </b>{{stock['volume']}}</li>
         <li><b>Exchange: </b>{{stock['exchange']}}</li>
-        <br>
+        
         <form action="/untrack-stock">
             <input type="hidden" name="tracked-stock" value="{{stock['symbol']}}">
-        <button>Untrack this Stock</button>
+        <button class="btn btn-lrg btn-primary track-untrack-btn">Untrack this Stock</button>
          </form>
-        
+         
     </ul>
     
+    <p class="more-info">For more information about {{stock['name']}} - Click <a href="/company-info/{{stock['symbol']}}">here.</a></p>
+    
+
 </div>
 
 

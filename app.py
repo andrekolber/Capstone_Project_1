@@ -26,29 +26,6 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
-def request_stock_list():
-    """Return list of all stocks"""
-
-    url = f"{API_BASE_URL}/stock/list?apikey={SECRET_KEY}"
-
-    response = requests.get(url)
-    r = response.json()
-
-    return r
-
-def add_stocks_to_db():
-    r = request_stock_list()
-    for i in range(len(r)):
-        stock = Stock(
-           symbol=r[i]['symbol'],
-           name=r[i]['name'],
-           exchange=r[i]['exchange'],
-           type=r[i]['type'])
-        
-        db.session.add(stock)
-        db.session.commit()
-
-
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
@@ -66,7 +43,7 @@ def welcome():
     if g.user:
         return redirect('/homepage')
 
-    return render_template('home.html')
+    return redirect('/login')
 
 
 def do_login(user):
@@ -145,7 +122,7 @@ def edit_profile():
     """Show profile details and handle edit profile form submission."""
 
     if not g.user:
-        flash("Access unauthorized.", "danger")
+        flash("Access unauthorized. Please Login First!", "danger")
         return redirect("/")
 
     user = g.user
@@ -160,7 +137,7 @@ def edit_profile():
 
             db.session.commit()
             flash("Profile Edited", "success")
-            return redirect('/portal')
+            return redirect('/homepage')
 
         flash("Password incorrect, please try again", "danger")
 
@@ -169,13 +146,22 @@ def edit_profile():
 @app.route('/homepage')
 def home_page():
     """Render Stock Portal Home Page"""
+
+    if not g.user:
+        flash("Access unauthorized. Please Login First!", "danger")
+        return redirect("/")
     
-    if g.user:
-
-        return render_template('portal.html')
-
     else:
-        return redirect('/login')
+        url = f"{API_BASE_URL}/stock/sectors-performance?apikey={SECRET_KEY}"
+        response = requests.get(url)
+        r = response.json()
+
+        url2 = f"{API_BASE_URL}/quote/%5EGSPC?apikey={SECRET_KEY}"
+        response2 = requests.get(url2)
+        r2 = response2.json()
+
+        return render_template('portal.html', sectors=r, sandp=r2[0])
+
 
 
 @app.route('/stock-search')
@@ -186,11 +172,26 @@ def search_for_stock():
     if not search:
         flash("Please enter a valid stock ticker!")
     else:
-        url = f"{API_BASE_URL}/quote/{search}?apikey={SECRET_KEY}"
-        response = requests.get(url)
-        r = response.json()
+        try:      
+            url = f"{API_BASE_URL}/quote/{search}?apikey={SECRET_KEY}"
+            response = requests.get(url)
+            r = response.json()
+            return render_template('search_results.html', stock=r[0])
+        except:
+            flash("Please enter a valid stock ticker", "danger")
+            return redirect('/homepage')
 
+
+@app.route('/stock-search/<stock_symbol>')
+def return_to_searched_stock(stock_symbol):
+    """Handle form submission and request stock details."""
+   
+    url = f"{API_BASE_URL}/quote/{stock_symbol}?apikey={SECRET_KEY}"
+    response = requests.get(url)
+    r = response.json()
     return render_template('search_results.html', stock=r[0])
+    
+
 
 
 @app.route('/track-stock', methods=["GET", "POST"])
@@ -198,50 +199,26 @@ def track_a_stock():
     """Add a stock to tracked_stocks table"""
 
     if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    stock = request.args.get('tracked-stock')
-
-    tracked_stock = TrackedStock(user_id=g.user.id, stock_symbol=stock)
-    db.session.add(tracked_stock)
-    db.session.commit()
-
-    flash("Stock Tracked", "success")
-    return redirect('/homepage')
-
-@app.route('/stock-info/<stock_symbol>')
-def Tracked_stock_info(stock_symbol):
-    """Show tracked stock information"""
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
+        flash("Access unauthorized. Please Login First!", "danger")
         return redirect("/")
     else:
-        url = f"{API_BASE_URL}/quote/{stock_symbol}?apikey={SECRET_KEY}"
-        response = requests.get(url)
-        r = response.json()
-
-    return render_template('stock_info.html', stock=r[0])
-
-
-@app.route('/tickers-list')
-def show_list_of_tickers():
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-    else:
-        stocks = Stock.query.order_by(Stock.symbol).all()
-    
-    return render_template('tickers_list.html', stocks=stocks)
+        stock = request.args.get('tracked-stock')
+        try:
+            tracked_stock = TrackedStock(user_id=g.user.id, stock_symbol=stock)
+            db.session.add(tracked_stock)
+            db.session.commit()
+            flash("Stock Tracked", "success")
+            return redirect('/homepage')
+        except:
+            flash("Stock Already Tracked!", "danger")
+            return redirect('/homepage')
 
 
 @app.route('/untrack-stock', methods=["GET", "POST"])
 def untrack_stock():
 
     if not g.user:
-        flash("Access unauthorized.", "danger")
+        flash("Access unauthorized. Please Login First!", "danger")
         return redirect("/")
     else:
         stock = request.args.get('tracked-stock')
@@ -252,10 +229,72 @@ def untrack_stock():
         flash("Stock Untracked", "info")
         return redirect('/homepage')
 
+        
+
+@app.route('/stock-info/<stock_symbol>')
+def Tracked_stock_info(stock_symbol):
+    """Show tracked stock information"""
+
+    if not g.user:
+        flash("Access unauthorized. Please Login First!", "danger")
+        return redirect("/")
+    else:
+        url = f"{API_BASE_URL}/quote/{stock_symbol}?apikey={SECRET_KEY}"
+        response = requests.get(url)
+        r = response.json()
+
+    return render_template('stock_info.html', stock=r[0])
 
 
 
+@app.route('/tickers-list')
+def show_list_of_tickers():
+
+    if not g.user:
+        flash("Access unauthorized. Please Login First!", "danger")
+        return redirect("/")
+    else:
+        stocks = Stock.query.order_by(Stock.symbol).all()
+    
+    return render_template('tickers_list.html', stocks=stocks)
 
 
 
+@app.route('/company-info/<stock_symbol>')
+def get_company_info(stock_symbol):
+    if not g.user:
+        flash("Access unauthorized. Please Login First!", "danger")
+        return redirect("/")
+    else:
+        url = f"{API_BASE_URL}/profile/{stock_symbol}?apikey={SECRET_KEY}"
+        response = requests.get(url)
+        r = response.json()
 
+    return render_template('company-info.html', info=r[0])
+    
+
+@app.route('/SandP')
+def get_SandP_data():
+    if not g.user:
+        flash("Access unauthorized. Please Login First!", "danger")
+        return redirect("/")
+    
+    else:
+        url = f"{API_BASE_URL}/quote/%5EGSPC?apikey={SECRET_KEY}"
+        response = requests.get(url)
+        r = response.json()
+        return render_template('/SandP.html', sandp=r[0])
+
+
+@app.route('/sectors')
+def get_sectors_data():
+    if not g.user:
+        flash("Access unauthorized. Please Login First!", "danger")
+        return redirect("/")
+
+    else:
+        url = f"{API_BASE_URL}/stock/sectors-performance?apikey={SECRET_KEY}"
+        response = requests.get(url)
+        r = response.json()
+
+        return render_template('/sectors.html', sectors=r)

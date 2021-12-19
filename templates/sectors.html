@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+
+{%block title%}S&P 500 Performance{%endblock%}
+
+{%block content%}
+<div id="sectors">
+    <h3 id="sectors-h3">Current Stock Market Sectors Performance</h3>
+    <table id="sectors-table">
+        <thead>
+            <tr>
+                <th>Sector</th>
+                <th>Changes Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sector in sectors['sectorPerformance']%}
+            <tr>
+                <td>{{sector['sector']}}</td>
+                <td>{{sector['changesPercentage']}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+{%endblock%}

@@ -1,0 +1,26 @@
+{%extends 'base.html'%}
+
+{%block title%}{{info['companyName']}}{%endblock%}
+
+{%block content%}
+<h2 id="company-info-h2">{{info['companyName']}} Information</h2>
+<div class="company-info-div">
+    <ul class="company-info-list">
+        <li><b>Industry: </b>{{info['industry']}}</li>
+        <li><b>Website: </b><a href="{{info['website']}}">{{info['website']}}</a></li>
+        <li><b>Description: </b>{{info['description']}}</li>
+        <li><b>CEO: </b>{{info['ceo']}}</li>
+        <li><b>Sector: </b>{{info['sector']}}</li>
+        <li><b>Country: </b>{{info['country']}}</li>
+        <li><b>City: </b>{{info['city']}}</li>
+        <li><b>State: </b>{{info['state']}}</li>
+        <li><b>Full Time Employees: </b>{{info['fullTimeEmployees']}}</li>
+        <li><b>LOGO:</b></li>
+        <li><img src="{{info['image']}}" alt=""></li>
+        
+    </ul>
+
+    
+    
+</div>
+{%endblock%}

@@ -9,19 +9,22 @@
     <input name="q" placeholder="Search for a Stock by Ticker" id="stock-search">
     <button id="search-btn" class="btn btn-md btn-primary">Search</button>
   </form>
-   <br>
-  <p>For a list of tickers click <a href="/tickers-list">here.</a></p>
+  <p>For a list of tickers click <a href="/tickers-list">here</a>.</p>
 </div>
 
 
 <div id="tracked-stocks-div">
   <h3 id="tracked-stocks-h3">Your Tracked Stocks</h3>
+  {%if g.user.tracked_stocks%}
   <ul id="tracked-stocks-list">
       {% for tracked_stock in g.user.tracked_stocks%}
         <li class="tracked-stock">
-          <a href="/stock-info/{{tracked_stock.stock_symbol}}">{{tracked_stock.stock_symbol}}</a>
+          <a class="btn btn-warning tracked-stock-btn" href="/stock-info/{{tracked_stock.stock_symbol}}">{{tracked_stock.stock_symbol}}</a>
         </li>
       {%endfor%}
+    {%else%}
+    <p>You are not tracking any stocks right now.</p>
+    {%endif%}
   </ul>
 </div>
 {%endblock%}

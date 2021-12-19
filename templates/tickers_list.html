@@ -2,12 +2,13 @@
 {%block title%}Tickers List{%endblock%}
 
 {%block content%}
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search a stock by company name...">
 <div id="ticker-table">
 <table>
     <thead class="table-head">
         <tr class="table-head-row">
-            <th>Symbol</th>
             <th>Company Name</th>
+            <th>Ticker</th>
             <th>Exchange</th>
             
         </tr>
@@ -15,14 +16,11 @@
     <tbody>
         {% for stock in stocks %}
         <tr>
-            <td>{{stock.symbol}}</td>
             <td>{{stock.name}}</td>
+            <td>{{stock.symbol}}</td>
             <td>{{stock.exchange}}</td>
         </tr>
         {%endfor%}
-        <div class="list-back-btn">
-        <a href="/homepage" class="btn btn-sml btn-primary"> Go Back</a>
-        </div>
     </tbody>
 </table>
 </div>

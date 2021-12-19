@@ -13,7 +13,7 @@
           {% for error in field.errors %}
             <span class="text-danger">{{ error }}</span>
           {% endfor %}
-          <div class="form-group row">
+          <div class="form-group row" id="edit-form-label">
             {{field.label(class="col-form-label")}}
           </div>
           {{ field(placeholder=field.label.text, class="form-control") }}

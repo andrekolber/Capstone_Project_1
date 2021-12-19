@@ -77,7 +77,7 @@ class TrackedStock(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),
                         nullable=False)
 
-    stock_symbol = db.Column(db.Text, nullable=False, unique=True)
+    stock_symbol = db.Column(db.Text, nullable=False, unique=False)
 
 
 

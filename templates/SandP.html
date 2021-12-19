@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+
+{%block title%}S&P 500 Performance{%endblock%}
+
+{%block content%}
+<div id="SandP">
+    <h3 id="SandP-h3">Current S&P 500 Performance</h3>
+    <div id="SandP-list">
+    <ul>
+        <li><b>Price: </b>{{sandp['price']}}</li>
+        <li><b>Changes Percentage: </b>{{sandp['changesPercentage']}}</li>
+        <li><b>Change: </b>{{sandp['change']}}</li>
+        <li><b>Day Low: </b>{{sandp['dayLow']}}</li>
+        <li><b>Day High: </b>{{sandp['dayHigh']}}</li>
+        <li><b>Year Low: </b>{{sandp['yearLow']}}</li>
+        <li><b>Year High: </b>{{sandp['yearHigh']}}</li>
+        <li><b>Price AVG 50: </b>{{sandp['priceAvg50']}}</li>
+        <li><b>Price AVG 200: </b>{{sandp['priceAvg200']}}</li>
+        <li><b>Volume: </b>{{sandp['volume']}}</li>
+        <li><b>Open: </b>{{sandp['open']}}</li>
+        <li><b>Previous Close: </b>{{sandp['previousClose']}}</li>
+    </ul>
+</div>
+</div>
+{%endblock%}

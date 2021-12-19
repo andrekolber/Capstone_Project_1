@@ -3,8 +3,9 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-
+<h1 id="the-stock-portal-h1">The Stock Portal</h1>
 <h1 id="login-h1">Login</h1>
+<p id="first-time">First time? <a href="/signup">Sign up</a>.</p> 
 <form method="POST">
 
   {{form.hidden_tag()}}
@@ -21,17 +22,18 @@
 
   {% for field in form if field.widget.input_type != 'hidden' %}
 
-  <div class="form-group row">
+  <div class="form-group row login-form">
     {{field.label(class="col-sm-2 col-form-label")}}
-    <div class="col-sm-10">
+    <div class="col-sm-4">
       {{field(class="form-control")}}
       <br>
     </div>
   </div>
 
   {% endfor %}
-
-  <button class="btn btn-primary">Login!</button>
+  <div id="login-btn-div">
+    <button class="btn btn-primary" id="login-btn">Login!</button>
+  </div>
 </form>
 
 {% endblock %}
