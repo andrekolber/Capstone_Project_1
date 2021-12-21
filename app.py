@@ -46,8 +46,19 @@ def welcome():
     """Show Welcome Page"""
     if g.user:
         return redirect('/homepage')
+    else:
+        stocks = Stock.query.all()
 
-    return redirect('/login')
+        def add_stocks():
+            for i in range(len(stocks)):
+                stock = Stock(symbol=stocks[i]['symbol'],
+                                name=stocks[i]['name'],
+                                exchange=stocks[i]['exchange'],
+                                type=stocks[i]['type'])
+                db.session.add(stock)
+                db.session.commit()
+        add_stocks()
+        return redirect('/login')
 
 
 def do_login(user):
