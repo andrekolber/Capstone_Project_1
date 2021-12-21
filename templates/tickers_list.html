@@ -2,7 +2,10 @@
 {%block title%}Tickers List{%endblock%}
 
 {%block content%}
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search a stock by company name...">
+<div id="ticker-list-search-div">
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search a stock by company name...">
+</div>
+
 <div id="ticker-table">
 <table>
     <thead class="table-head">
@@ -15,7 +18,7 @@
     </thead>
     <tbody>
         {% for stock in stocks %}
-        <tr>
+        <tr class="tickers">
             <td>{{stock.name}}</td>
             <td>{{stock.symbol}}</td>
             <td>{{stock.exchange}}</td>

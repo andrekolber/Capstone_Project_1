@@ -8,7 +8,7 @@ from sqlalchemy import exc
 from models import db, User, TrackedStock
 
 os.environ['DATABASE_URL'] = "postgresql:///stock-portal-test"
-from app import CURR_USER_KEY, app
+from app import CURR_USER_KEY, app, do_login
 app.config['TESTING'] = True
 app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
 app.config['SQLALCHEMY_ECHO'] = False
@@ -168,8 +168,8 @@ class ViewTestCase(TestCase):
 
 
     def test_login(self):
-        user = User.authenticate(self.testuser.username, self.testuser.passsword)
-        self.assertTrue(user)
+        with app.test_client() as client:
+            self.assertTrue(User.authenticate(self.testuser.username, self.testuser.password))
 
 
 

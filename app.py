@@ -3,6 +3,7 @@
 import os
 from flask import Flask, render_template, redirect, request, flash, session, g
 from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy import exc
 from sqlalchemy.exc import IntegrityError
 import requests
 from keys import SECRET_KEY
@@ -150,17 +151,8 @@ def home_page():
     if not g.user:
         flash("Access unauthorized. Please Login First!", "danger")
         return redirect("/")
-    
-    else:
-        url = f"{API_BASE_URL}/stock/sectors-performance?apikey={SECRET_KEY}"
-        response = requests.get(url)
-        r = response.json()
 
-        url2 = f"{API_BASE_URL}/quote/%5EGSPC?apikey={SECRET_KEY}"
-        response2 = requests.get(url2)
-        r2 = response2.json()
-
-        return render_template('portal.html', sectors=r, sandp=r2[0])
+    return render_template('portal.html')
 
 
 
@@ -178,8 +170,12 @@ def search_for_stock():
             r = response.json()
             return render_template('search_results.html', stock=r[0])
         except:
-            flash("Please enter a valid stock ticker", "danger")
-            return redirect('/homepage')
+            if r['Error Message'] == "Limit Reach . Please upgrade your plan or visit our documentation for more details at https://financialmodelingprep.com/developer/docs/pricing ":
+                flash("Data currently not available. Try again later.", "danger")
+                return redirect('/homepage')
+            else:
+                flash("Please enter a valid stock ticker", "danger")
+                return redirect('/homepage')
 
 
 @app.route('/stock-search/<stock_symbol>')
@@ -280,10 +276,14 @@ def get_SandP_data():
         return redirect("/")
     
     else:
-        url = f"{API_BASE_URL}/quote/%5EGSPC?apikey={SECRET_KEY}"
-        response = requests.get(url)
-        r = response.json()
-        return render_template('/SandP.html', sandp=r[0])
+        try:
+            url = f"{API_BASE_URL}/quote/%5EGSPC?apikey={SECRET_KEY}"
+            response = requests.get(url)
+            r = response.json()
+            return render_template('SandP.html', sandp=r[0])
+        except:
+            flash("Data currently not available. Try again later.", "danger")
+            return redirect('/homepage')
 
 
 @app.route('/sectors')
@@ -293,8 +293,30 @@ def get_sectors_data():
         return redirect("/")
 
     else:
-        url = f"{API_BASE_URL}/stock/sectors-performance?apikey={SECRET_KEY}"
-        response = requests.get(url)
-        r = response.json()
+        try:
+            url = f"{API_BASE_URL}/stock/sectors-performance?apikey={SECRET_KEY}"
+            response = requests.get(url)
+            r = response.json()
+            return render_template('sectors.html', sectors=r)
+        except:
+            if r['Error Message'] == "Limit Reach . Please upgrade your plan or visit our documentation for more details at https://financialmodelingprep.com/developer/docs/pricing ":
+                flash("Data currently not available. Try again later.", "danger")
+                return redirect('/homepage')
+            
+                
+        
 
-        return render_template('/sectors.html', sectors=r)
+        
+
+
+def get_sectors():
+    url = f"{API_BASE_URL}/stock/sectors-performance?apikey={SECRET_KEY}"
+    response = requests.get(url)
+    r = response.json()
+    return r
+
+def get_stock():
+    url = f"{API_BASE_URL}/quote/aKJSHSD?apikey={SECRET_KEY}"
+    response = requests.get(url)
+    r = response.json()
+    return r
