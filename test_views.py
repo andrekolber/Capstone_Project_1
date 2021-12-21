@@ -167,9 +167,7 @@ class ViewTestCase(TestCase):
             self.assertIn("testuser", html)
 
 
-    def test_login(self):
-        with app.test_client() as client:
-            self.assertTrue(User.authenticate(self.testuser.username, self.testuser.password))
+   
 
 
 
