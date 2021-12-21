@@ -3,7 +3,6 @@
 import os
 from flask import Flask, render_template, redirect, request, flash, session, g
 from flask_debugtoolbar import DebugToolbarExtension
-from sqlalchemy import exc
 from sqlalchemy.exc import IntegrityError
 import requests
 from keys import SECRET_KEY
