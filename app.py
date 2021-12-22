@@ -309,6 +309,7 @@ def get_sectors_data():
                 
         
 def add_stocks():
+    stocks = Stock.query.all()
     for i in range(len(stocks)):
         stock = Stock(symbol=stocks[i]['symbol'],
                     name=stocks[i]['name'],
