@@ -316,6 +316,6 @@ def add_stocks():
                     exchange=stocks[i]['exchange'],
                     type=stocks[i]['type'])
 
-        return stock
+        return stock[i]
         
 
