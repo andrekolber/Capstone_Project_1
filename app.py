@@ -94,7 +94,7 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Produce login form or handle login."""
+    """Produce login form/handle login."""
 
     form = LoginForm()
 
@@ -311,15 +311,3 @@ def get_sectors_data():
 
         
 
-
-def get_sectors():
-    url = f"{API_BASE_URL}/stock/sectors-performance?apikey={SECRET_KEY}"
-    response = requests.get(url)
-    r = response.json()
-    return r
-
-def get_stock():
-    url = f"{API_BASE_URL}/quote/aKJSHSD?apikey={SECRET_KEY}"
-    response = requests.get(url)
-    r = response.json()
-    return r
