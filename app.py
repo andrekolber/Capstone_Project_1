@@ -308,6 +308,13 @@ def get_sectors_data():
             
                 
         
+def add_stocks():
+    for i in range(len(stocks)):
+        stock = Stock(symbol=stocks[i]['symbol'],
+                    name=stocks[i]['name'],
+                    exchange=stocks[i]['exchange'],
+                    type=stocks[i]['type'])
 
+        print(stock)
         
 
