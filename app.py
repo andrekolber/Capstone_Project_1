@@ -164,21 +164,15 @@ def search_for_stock():
     """Handle form submission and request stock details."""
 
     search = request.args.get('q').upper()
-    if not search:
-        flash("Please enter a valid stock ticker!")
-    else:
-        try:      
-            url = f"{API_BASE_URL}/quote/{search}?apikey={SECRET_KEY}"
-            response = requests.get(url)
-            r = response.json()
-            return render_template('search_results.html', stock=r[0])
-        except:
-            if r['Error Message'] == "Limit Reach . Please upgrade your plan or visit our documentation for more details at https://financialmodelingprep.com/developer/docs/pricing ":
-                flash("Data currently not available. Try again later.", "danger")
-                return redirect('/homepage')
-            else:
-                flash("Please enter a valid stock ticker", "danger")
-                return redirect('/homepage')
+    
+    try:      
+        url = f"{API_BASE_URL}/quote/{search}?apikey={SECRET_KEY}"
+        response = requests.get(url)
+        r = response.json()
+        return render_template('search_results.html', stock=r[0])
+    except:
+            flash("Please enter a valid stock ticker", "danger")
+            return redirect('/homepage')
 
 
 @app.route('/stock-search/<stock_symbol>')
